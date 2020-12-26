@@ -1,8 +1,6 @@
-package Chapter03;
+package Chapter03.example3_1;
 
-import java.io.IOException;
-
-public class Example3_1 {
+public class MySolution {
     public static void main(String[] args){
         int n = 1260;                               //거슬러 줘야 할 돈
         int result = 0;                             //거슬러 줘야 할 동전의 최소 개수 초기화
