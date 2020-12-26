@@ -7,10 +7,6 @@ def to1(N,K,result):
         return to1(N - 1,K,result + 1)
     return to1(N/K,K,result + 1)
 
-        
-
-
-
 #어떠한 수 N과 K를 입력받는다.
 N, K = map(int, input().split())
 

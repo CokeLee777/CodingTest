@@ -4,6 +4,7 @@ def numberCardGame(N, M, result):
     #각 카드에 적인 숫자가 주어진다.
     for i in range(N):
         cardlist = list(map(int, input().split()))
+        #현재 행에서 가장 작은 수 찾기
         if result < min(cardlist):    
             result = min(cardlist)
         
