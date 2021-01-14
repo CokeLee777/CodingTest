@@ -5,7 +5,7 @@ import java.util.*;
 public class MySourceCode {
     public static void main(String[] args){
         Queue<Integer> queue = new LinkedList<>();
-
+        queue.offer(1);
         queue.add(5);
         queue.add(2);
         queue.add(3);
@@ -19,6 +19,9 @@ public class MySourceCode {
             System.out.println(queue.peek());       //먼저 들어온 순서대로 출력.
             queue.remove();                         //먼저 들어온 순서대로 꺼낸다.
         }
+
+        System.out.println(queue.poll());
+        System.out.println(queue.peek());
 
     }
 }

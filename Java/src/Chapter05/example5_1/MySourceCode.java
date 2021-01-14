@@ -20,5 +20,6 @@ public class MySourceCode {
             System.out.println(stack.peek());   //제일 최상단의 스택을 확인한다.
             stack.pop();                        //제일 최상단의 스택을 꺼낸다.
         }
+
     }
 }
