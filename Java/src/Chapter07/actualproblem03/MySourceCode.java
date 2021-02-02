@@ -3,51 +3,52 @@ package Chapter07.actualproblem03;
 import java.util.*;
 
 public class MySourceCode {
-
-    public static int[] array;
-
+    //떡의 갯수, 손님이 요청한 떡의 길이
+    public static int n, m;
+    //떡들을 담을 배열
+    public static int[] arr;
+    //결과를 담을 변수
     public static int result = 0;
 
     public static int binarySearch(int[] arr, int target, int start, int end){
-
-        int total = 0;
-
-        //이진탐색이 끝나면 종료
+        int sum = 0;
+        //떡을 타겟만큼 자르지 못할 때
         if(start > end) return result;
-
-        //중간 점
+        //중간 값
         int mid = (start + end) / 2;
+        //떡 자르기
 
         for(int i = 0; i < arr.length; i++){
-            //잘랐을 때의 떡의 양 계산
-            if(arr[i] > mid) total += arr[i] - mid;
+            //떡의 길이가 중간값보다 크다면 절단
+            if(arr[i] > mid) {
+                sum += arr[i] - mid;
+            }
         }
-
-        if(total < target){ //요청한 떡보다 적은 경우
-            return binarySearch(array, target, start, mid - 1);
-        } else { //떡의 양이 충분한 경우
+        //원하는 값보다 작다면
+        if(target > sum) return binarySearch(arr, target, start, mid - 1);
+        //원하는 값보다 크다면
+        else {
             result = mid;
-            return binarySearch(array, target, mid + 1, end);
+            return binarySearch(arr, target, mid + 1, end);
         }
-
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        //떡의 갯수 입력받기
+        n = sc.nextInt();
+        //요청한 떡의 길이 입력받기
+        m = sc.nextInt();
+        //떡들 담기
+        arr = new int[n];
+        for(int i = 0; i < n; i++){
+            arr[i] = sc.nextInt();
+        }
+        //떡들 정렬하기
+        Arrays.sort(arr);
 
-        //떡의 갯수와 요청한 떡의 길이 입력받기
-        int n = sc.nextInt();
-        int m = sc.nextInt();
-        //떡의 개별 높이 입력받기
-        array = new int[n];
-        for(int i = 0; i < n; i++) array[i] = sc.nextInt();
-        //떡들을 오름차순으로 정렬
-        Arrays.sort(array);
-
-        //떡의 길이의 최대값으로 끝점 설정
-        int end = (int)1e9;
-
-        System.out.println(binarySearch(array, m, 0, end));
+        int result = binarySearch(arr, m, arr[0], arr[n - 1]);
+        System.out.println("result = " + result);
 
     }
 
