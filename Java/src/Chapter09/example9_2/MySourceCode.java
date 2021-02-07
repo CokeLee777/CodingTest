@@ -2,27 +2,35 @@ package Chapter09.example9_2;
 
 import java.util.*;
 
-class Node implements Comparable<Node>{
+class Node1 implements Comparable<Node1>{
 
     private int index;
     private int distance;
 
-    public Node(int index, int distance){
+    public Node1(int index, int distance) {
         this.index = index;
         this.distance = distance;
     }
 
-    public int getIndex(){
-        return this.index;
+    public int getIndex() {
+        return index;
     }
 
-    public int getDistance(){
-        return this.distance;
+    public void setIndex(int index) {
+        this.index = index;
     }
 
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+    //오름차순으로 정렬
     @Override
-    public int compareTo(Node node) {
-        if(this.distance < node.distance) return -1;
+    public int compareTo(Node1 node1) {
+        if(this.distance < node1.distance) return -1;
         else return 1;
     }
 }
@@ -30,30 +38,28 @@ class Node implements Comparable<Node>{
 public class MySourceCode {
 
     public static final int INF = (int)1e9;
-    public static int n, m, start;
-    public static int[] d = new int[100001];
-    public static ArrayList<ArrayList<Node>> graph = new ArrayList<ArrayList<Node>>();
+    public static ArrayList<ArrayList<Node1>> graph = new ArrayList<ArrayList<Node1>>();
+    public static int n, m, start;  //노드의 갯수, 간선의 갯수, 시작위치
+    public static int[] d;
 
-    public static void dijkstra(int start){
-        //우선순위 큐 사용
-        PriorityQueue<Node> pq = new PriorityQueue<>();
-        //시작노드 초기화 출발위치에서 거리는 0
-        pq.offer(new Node(start, 0));
+    public static void dyikstra(int start){
+        PriorityQueue<Node1> queue = new PriorityQueue<>();
+        //큐에 시작위치 삽입
+        queue.offer(new Node1(start, 0));
         d[start] = 0;
         //큐가 빌때까지 반복
-        while(!pq.isEmpty()) {
-            //가장 거리가 짧은 노드 꺼내기
-            Node node = pq.poll();
-            int dist = node.getDistance();  //현재 노드까지의 비용
-            int now = node.getIndex();    //현재 노드
-            //현재 노드가 이미 처리된 노드라면 무시
-            if(d[now] < dist) continue;
-            //현재 노드와 연결된 다른 노드를 확인한다.
-            for(int i = 0; i < graph.get(now).size(); i++){
-                int sum = d[now] + graph.get(now).get(i).getDistance();
-                if(sum <= d[graph.get(now).get(i).getIndex()]){
-                    d[graph.get(now).get(i).getIndex()] = sum;
-                    pq.offer(new Node(graph.get(now).get(i).getIndex(), sum));
+        while(!queue.isEmpty()){
+            Node1 now = queue.poll();
+            int index = now.getIndex();
+            int distance = now.getDistance();
+            //이미 처리된 노드라면 무시한다.
+            if(d[index] < distance) continue;
+            //다익스트라 알고리즘 수행
+            for(int i = 0; i < graph.get(index).size(); i++){
+                int cost = d[index] + graph.get(index).get(i).getDistance();
+                if(cost < d[graph.get(index).get(i).getIndex()]){
+                    d[graph.get(index).get(i).getIndex()] = cost;
+                    queue.offer(new Node1(graph.get(index).get(i).getIndex(), cost));
                 }
             }
         }
@@ -61,31 +67,31 @@ public class MySourceCode {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        //노드의 갯수, 간선의 갯수, 시작노드 입력받기
+        //노드의 갯수, 간선의 갯수, 시작위치 입력받기
         n = sc.nextInt();
         m = sc.nextInt();
         start = sc.nextInt();
-        //그래프 입력받기
+        //그래프 초기화
+        d = new int[n + 1];
+
         for(int i = 0; i <= n; i++){
-            graph.add(new ArrayList<Node>());
+            graph.add(new ArrayList<>());
         }
         for(int i = 0; i < m; i++){
             int a = sc.nextInt();
             int b = sc.nextInt();
             int c = sc.nextInt();
-            //a에서 b로가는 비용이 c
-            graph.get(a).add(new Node(b,c));
+            graph.get(a).add(new Node1(b, c));
         }
-        //최단거리 테이블 초기화
+
         Arrays.fill(d, INF);
 
-        //빠른 다익스트라 알고리즘 수행
-        dijkstra(start);
+        dyikstra(start);
 
-        //출력
-        for(int i = 1; i <= n; i++){
+        for(int i = 1; i < d.length; i++){
             if(d[i] == INF) System.out.println("INFINITY");
             else System.out.println(d[i]);
         }
     }
+
 }
