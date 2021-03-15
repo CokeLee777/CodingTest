@@ -3,26 +3,25 @@ package Chapter04.example4_2;
 import java.util.*;
 
 public class MySourceCode {
-    public static boolean check(int hour, int minutes, int seconds){
-        if(hour / 10 == 3 || hour % 10 == 3 || minutes / 10 == 3 || minutes % 10 == 3 || seconds / 10 == 3 || seconds % 10 == 3){
-            return true;
-        }
-        return false;
-    }
 
     public static void main(String[] args){
-        Scanner scanner = new Scanner(System.in);
-        //시 입력 받기
-        int n = scanner.nextInt();
+        Scanner sc = new Scanner(System.in);
+        //시각을 입력받는다.
+        int n = sc.nextInt();
 
         int result = 0;
-        for(int i = 0; i <= n; i++){
-            for(int j = 0; j < 60; j++){
-                for(int k = 0; k < 60; k++){
-                    if(check(i,j,k)) result += 1;
+        for(Integer h = 0; h <= n; h++){
+            String sh = h.toString();
+            for(Integer m = 0; m < 60; m++){
+                String sm = m.toString();
+                for(Integer s = 0; s < 60; s++){
+                    String ss = s.toString();
+                    //3이 하나라도 포함되면 횟수 증가
+                    if(sh.contains("3") || sm.contains("3") || ss.contains("3")) result++;
                 }
             }
         }
-        System.out.println(result);
+
+        System.out.println("result = " + result);
     }
 }

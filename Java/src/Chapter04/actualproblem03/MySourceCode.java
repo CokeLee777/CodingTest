@@ -3,79 +3,76 @@ package Chapter04.actualproblem03;
 import java.util.*;
 
 public class MySourceCode {
-    //맵의 크기, 현재위치, 현재 방향
-    public static int n, m, x, y, direction;
-    //방문한 곳을 저장하기 위한 맵
-    public static int[][] visited = new int[50][50];
-    //전체 맵
-    public static int[][] map = new int[50][50];
-    //북,동,남,서 방향
-    public static int[] dx = {0,1,0,-1};
-    public static int[] dy = {-1,0,1,0};
 
-    public static int tried = 0;
+    public static int n, m;             //맵의 세로크기, 가로크기
+    public static boolean[][] visited;  //방문처리 그래프
+    public static int[][] graph;        //그래프
+    //북, 동, 남, 서
+    public static int[] dx = {-1,0,1,0};
+    public static int[] dy = {0,1,0,-1};
 
-    //반시계 방향으로 회전하는 메서드
-    public static void turnleft(){
-        direction--;
-        if(direction == -1) direction = 3;
+    public static int turnLeft(int direction){
+        direction -= 1;
+        if(direction < 0) direction = 3;
+
+        return direction;
     }
 
     public static void main(String[] args){
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
-        //맵 크기 입력받기
-        n = scanner.nextInt();
-        m = scanner.nextInt();
-        //현재 위치, 방향 입력받기
-        x = scanner.nextInt();
-        y = scanner.nextInt();
-        direction = scanner.nextInt();
-        //맵 입력 받기
+        //맵의 세로, 가로크기를 입력받는다.
+        n = sc.nextInt();
+        m = sc.nextInt();
+        //캐릭터의 위치와 방향을 입력받는다.
+        int x = sc.nextInt();
+        int y = sc.nextInt();
+        int direction = sc.nextInt();
+        //방문처리 그래프, 맵 초기화
+        visited = new boolean[n][m];
+        graph = new int[n][m];
         for(int i = 0; i < n; i++){
             for(int j = 0; j < m; j++){
-                map[i][j] = scanner.nextInt();
+                graph[i][j] = sc.nextInt();
             }
         }
-        //현재 위치 방문처리
-        visited[x][y] = 1;
-
+        visited[x][y] = true;
         int result = 1;
 
         while(true){
-            //현재 방향에서 왼쪽으로 회전
-            turnleft();
-            //앞으로 전진
+            //왼쪽으로 회전
+            direction = turnLeft(direction);
             int nx = x + dx[direction];
             int ny = y + dy[direction];
-            //가봤거나 맵이 바다이면 처음으로 돌아가서 다시 수행
-            if(map[nx][ny] == 1 || visited[nx][ny] == 1){
-                tried++;
-            }
-            else{
-                visited[nx][ny] = 1;
+            //가보지 않은 칸이라면 전진
+            if(graph[nx][ny] == 0 && !visited[nx][ny]){
                 x = nx;
                 y = ny;
+                visited[nx][ny] = true;
                 result++;
-                tried = 0;
                 continue;
             }
-            //네 방향 모두 이미 가본 칸이거나 바다로 되어있는 경우
-            if(tried == 4){
-                nx = x - dx[direction];
-                ny = y - dy[direction];
-                tried = 0;
-                if(map[nx][ny] == 1){
-                    break;
-                }
+            //가본 칸이라면 무시
+            if(graph[nx][ny] == 0 && visited[nx][ny]) continue;
+            //네 방향 모두 가본 칸이거나 바다로 되어있는 경우
+            if(graph[nx][ny] == 1 || visited[nx][ny]){
+                //뒤쪽 방향이 바다인 칸이라면 종료
+                if(graph[x-dx[direction]][y-dy[direction]] == 1) break;
+                //아니라면 뒤로 이동
                 else{
-                    x = nx;
-                    y = ny;
+                    x -= dx[direction];
+                    y -= dy[direction];
+                    //뒤쪽칸을 가보지 않았다면 횟수 증가
+                    if(!visited[x][y]){
+                        result++;
+                        visited[x][y] = true;
+                    }
                 }
             }
 
         }
 
-        System.out.println(result);
+        System.out.println("result = " + result);
+
     }
 }

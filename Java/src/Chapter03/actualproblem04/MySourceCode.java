@@ -3,30 +3,27 @@ package Chapter03.actualproblem04;
 import java.util.*;
 
 public class MySourceCode {
+
+    public static int[] d;
+
     public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
 
-        Scanner scanner = new Scanner(System.in);
-        //어떠한 수 n, 나누는 수 k 를 공백을 기준으로 입력받는다.
-        int n = scanner.nextInt();
-        int k = scanner.nextInt();
+        int n = sc.nextInt();   //어떠한 수 n을 입력받는다
+        int k = sc.nextInt();   //나누는 수 k를 입력받는다 n >= k
 
-        int result = 0;
+        d = new int[n+1];       //다익스트라 테이블 생성
 
-        while(true){
-            //n 이 1이되면 종료
-            if(n == 1) break;
-            //n 이 k 로 나누어 떨어지지 않으면
-            if(n % k != 0){
-                n -= 1;
-                result += 1;
-                continue;
-            }
-            else{
-                n /= k;
-                result += 1;
+        //보텀업 로직 수행
+        for(int i = 2; i < n+1; i++){
+            //1을 빼는 경우
+            d[i] = d[i-1] + 1;
+            //k로 나누는 경우, 1을 먼저 뺀 경우와 비교
+            if(i % k == 0){
+                d[i] = Math.min(d[i], d[i / k]);
             }
         }
-        //결과 값 출력
-        System.out.println(result);
+
+        System.out.println(d[n]);
     }
 }

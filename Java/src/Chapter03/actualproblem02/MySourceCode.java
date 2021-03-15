@@ -3,36 +3,39 @@ package Chapter03.actualproblem02;
 import java.util.*;
 
 public class MySourceCode {
+
+    public static int[] arr;
+
     public static void main(String[] args){
-        Scanner scanner = new Scanner(System.in);
-        //배열의 크기 n, 숫자가 더해지는 횟수 m, 최대 연속 합 k 를 공백을 기준으로 입력 받기
-        int n = scanner.nextInt();
-        int m = scanner.nextInt();
-        int k = scanner.nextInt();
-        //숫자들 공백을 기준으로 입력받기
-        int[] data = new int[n];
-        for(int i = 0; i < data.length; i++){
-            data[i] = scanner.nextInt();
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();   //입력받을 자연수의 개수
+        int m = sc.nextInt();   //더할 자연수의 개수
+        int k = sc.nextInt();   //같은수가 연속해서 더할수 있는 횟수
+
+        //n개의 자연수를 입력받는다
+        arr = new int[n];
+        for(int i = 0; i < n; i++){
+            arr[i] = sc.nextInt();
         }
 
-        Arrays.sort(data);      //배열 정렬하기
-        int first = data[n-1];  //배열 내 첫번째로 큰 수
-        int second = data[n-2]; //배열 내 두번째로 큰 수
+        //배열을 정렬한다.
+        Arrays.sort(arr);
 
-        int result = 0;             //결과를 담을 변수
-        while(m > 0){
-
-            for(int i = 0; i < k; i++){
-                result += first;
-                m -= 1;
-                if(m == 0) break;
+        int cons = 0;       //연속해서 더하는 횟수
+        int result = 0;     //결과값
+        //m개의 자연수를 조건에 맞게 더한다.
+        for(int i = 0; i < m; i++){
+            //특정 인덱스의 연속 더함이 k를 넘지 않으면
+            if(cons < k){
+                cons += 1;
+                result += arr[n-1];
+            } else {
+                cons = 0;
+                result += arr[n-2];
             }
-
-            if(m == 0) break;
-            result += second;
-            m -= 1;
         }
 
-        System.out.println(result);
+        System.out.println("result = " + result);
     }
 }

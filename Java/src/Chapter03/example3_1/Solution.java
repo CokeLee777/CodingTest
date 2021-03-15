@@ -1,6 +1,6 @@
 package Chapter03.example3_1;
 
-public class MySolution {
+public class Solution {
     public static void main(String[] args){
         int n = 1260;                               //거슬러 줘야 할 돈
         int result = 0;                             //거슬러 줘야 할 동전의 최소 개수 초기화
