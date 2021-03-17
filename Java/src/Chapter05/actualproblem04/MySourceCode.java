@@ -2,81 +2,76 @@ package Chapter05.actualproblem04;
 
 import java.util.*;
 
-class Node{
-    private int index;
-    private int distance;
+class Node1{
 
-    Node(int index, int distance){
-        this.index = index;
-        this.distance = distance;
+    private int x;
+    private int y;
+
+    public Node1(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public int getIndex() {
-        return this.index;
+    public int getX() {
+        return x;
     }
 
-    public int getDistance() {
-        return this.distance;
+    public int getY() {
+        return y;
     }
-
 }
 
 public class MySourceCode {
 
-    public static int[][] graph = new int[201][201];
+    public static int n, m;         //세로, 가로크기
+    public static int[][] graph;    //맵 정보
+    //동서남북 방향
+    public static int[] dx = {0,0,1,-1};
+    public static int[] dy = {1,-1,0,0};
 
-    public static boolean[][] visited = new boolean[201][201];
-
-    //상, 하, 좌, 우
-    public static int[] dx = {-1,1,0,0};
-    public static int[] dy = {0,0,-1,1};
-
-    public static int n;
-    public static int m;
-
-    public static int bfs(int x, int y){
-        Queue<Node> queue = new LinkedList<>();
-
-        queue.offer(new Node(x,y));     //큐에 삽입
-
+    public static void bfs(int x, int y){
+        Queue<Node1> queue = new LinkedList<>();
+        //첫 노드 큐에 삽입
+        queue.offer(new Node1(x,y));
+        //큐가 빌때까지 반복
         while(!queue.isEmpty()){
-            Node node = queue.poll();   //queue에서 하나를 반환하고 제거
-            //현재 동빈이의 위치를 node 객체의 메서드로부터 호출
-            x = node.getIndex();
-            y = node.getDistance();
-            //네 방향의 위치 확인
+            Node1 now = queue.poll();
+            int nowX = now.getX();
+            int nowY = now.getY();
+            //네 방향 반복
             for(int i = 0; i < 4; i++){
-                int nx = x + dx[i];
-                int ny = y + dy[i];
-                //미로를 이탈하는 경우
+                int nx = nowX + dx[i];
+                int ny = nowY + dy[i];
+                //벽이면 무시
                 if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-                //괴물이 있는 부분인 경우
-                if(graph[nx][ny] == 0) continue;
-                //특정 노드를 처음 방문하는 경우
+                //처음 가본 곳이면 수행
                 if(graph[nx][ny] == 1){
-                    graph[nx][ny] = graph[x][y] + 1;
-                    queue.offer(new Node(nx,ny));
+                    graph[nx][ny] = graph[nowX][nowY] + 1;
+                    queue.offer(new Node1(nx, ny));
                 }
             }
         }
-
-        return graph[n-1][m-1];
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        // n행 m열의 미로
+        //맵의 세로, 가로크기 입력받기
         n = sc.nextInt();
         m = sc.nextInt();
-        sc.nextLine();          //버퍼 지우기
+        sc.nextLine();  //버퍼 지우기
 
+        //맵 정보 입력받기
+        graph = new int[n][m];
         for(int i = 0; i < n; i++){
-            String str = sc.nextLine();
+            String s = sc.nextLine();
             for(int j = 0; j < m; j++){
-                graph[i][j] = str.charAt(j) - '0';
+                graph[i][j] = s.charAt(j) - '0';
             }
         }
+        //미로 이동 수행
+        bfs(0,0);
 
-        System.out.println(bfs(0,0));
+        System.out.println(graph[n-1][m-1]);
     }
+
 }
