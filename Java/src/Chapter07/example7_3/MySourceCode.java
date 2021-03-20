@@ -1,4 +1,4 @@
-package Chapter07.example7_2;
+package Chapter07.example7_3;
 
 import java.util.*;
 
@@ -10,22 +10,20 @@ public class MySourceCode {
 
     //재귀함수로 구현한 이진탐색 메서드
     public static int binarySearch(int start, int end, int target){
-        //찾는 원소가 없다면
-        if(start > end) return -1;
-        //중간점 지정
-        int mid = (start + end) / 2;
-        //중간값 보다 작다면
-        if(arr[mid] > target){
-            return binarySearch(start, mid-1, target);
+        while(start <= end){
+            //중간점 지정
+            int mid = (start + end) / 2;
+            //타겟이 중간값보다 작다면
+            if(target < arr[mid]){
+                end = mid - 1;
+            } else if (target == arr[mid]) {
+                return mid;
+            } else {
+                start = mid + 1;
+            }
         }
-        //타겟과 일치한다면
-        else if (arr[mid] == target){
-            return mid;
-        }
-        //중간값 보다 크다면
-        else {
-            return binarySearch(mid+1, end, target);
-        }
+        //찾는 원소가 없다면 -1 반환
+        return -1;
     }
 
     public static void main(String[] args) {
@@ -53,5 +51,4 @@ public class MySourceCode {
 
 
     }
-
 }

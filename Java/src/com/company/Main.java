@@ -33,6 +33,13 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
+        Queue<String> queue = new LinkedList<>();
+        String[] arr = new String[10];
+        queue.offer("1");
+        queue.offer("2");
+        queue.offer("3");
+        queue.offer("4");
+
 
 
     }

@@ -1,8 +1,11 @@
 package Chapter06.example6_6;
 
+import java.util.Arrays;
+
 public class MySourceCode {
 
     public static int[] arr = new int[]{7,5,9,0,3,1,6,2,9,1,4,8,0,5,2};
+    public static int[] arr2 = new int[]{7,5,9,0,3,1,6,2,9,1,4,8,0,5,2};
 
     public static int[] check = new int[10];
 

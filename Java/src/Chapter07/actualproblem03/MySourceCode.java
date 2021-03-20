@@ -10,46 +10,51 @@ public class MySourceCode {
     //결과를 담을 변수
     public static int result = 0;
 
-    public static int binarySearch(int[] arr, int target, int start, int end){
-        int sum = 0;
-        //떡을 타겟만큼 자르지 못할 때
-        if(start > end) return result;
-        //중간 값
-        int mid = (start + end) / 2;
-        //떡 자르기
+    public static int binarySearch(int start, int end, int target){
 
-        for(int i = 0; i < arr.length; i++){
-            //떡의 길이가 중간값보다 크다면 절단
-            if(arr[i] > mid) {
-                sum += arr[i] - mid;
+        while(start <= end){
+            //중간 값
+            int mid = (start + end) / 2;
+            //떡 자르기
+            int sum = 0;
+            for(int i = 0; i < arr.length; i++){
+                int cut = arr[i] - mid;
+                if(cut > 0){
+                    sum += cut;
+                }
+            }
+            //자른 길이가 요청한 떡의 길이보다 크거나 같다면
+            if(sum >= target) {
+                start = mid + 1;
+                result = mid;
+            }
+            //자른 길이가 요청한 떡의 길이보다 작다면
+            else {
+                end = mid - 1;
             }
         }
-        //원하는 값보다 작다면
-        if(target > sum) return binarySearch(arr, target, start, mid - 1);
-        //원하는 값보다 크다면
-        else {
-            result = mid;
-            return binarySearch(arr, target, mid + 1, end);
-        }
+
+        return result;
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        //떡의 갯수 입력받기
+
+        //떡의 개수 입력받기
         n = sc.nextInt();
         //요청한 떡의 길이 입력받기
         m = sc.nextInt();
-        //떡들 담기
+        //떡의 개별 높이 입력받기
         arr = new int[n];
-        for(int i = 0; i < n; i++){
+        for(int i = 0; i < arr.length; i++){
             arr[i] = sc.nextInt();
         }
-        //떡들 정렬하기
+
         Arrays.sort(arr);
 
-        int result = binarySearch(arr, m, arr[0], arr[n - 1]);
-        System.out.println("result = " + result);
+        result = binarySearch(arr[0], arr[n-1], m);
 
+        System.out.println("result = " + result);
     }
 
 }
