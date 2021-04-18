@@ -2,67 +2,48 @@ package com.company;
 
 import java.util.*;
 
+//class Numbers implements Comparable<Numbers>{
+//
+//    private String number;
+//
+//    public Numbers(String number) {
+//        this.number = number;
+//    }
+//
+//    public String getNumber() {
+//        return number;
+//    }
+//
+//    @Override
+//    public int compareTo(Numbers numbers) {
+//        for(int i = 0; i < numbers.getNumber().length(); i++){
+//        }
+//    }
+//}
+
 public class Main {
 
-    public static ArrayList<String> answers = new ArrayList<>();
-    public static ArrayList<Integer> courseList = new ArrayList<>();
-    public static String[] orders = new String[]{"ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"};
-    public static int[] course = new int[]{2,3,4};
-
+    public static List<String> numbers = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        int k = 4;
+        String number = "4177252841";
 
-        String[] solution = solution(orders, course);
 
-        Arrays.sort(solution);
+        //총 문자열의 길이
+        int totalLength = number.length() - k;
 
-        for(String s: solution){
-            System.out.print(s + " ");
-        }
-    }
+        int prevIdx = 0;
+        //총 문자열의 길이만큼 반복
+        for(int i = 0; i < totalLength; i++){
+            String prev = number.substring(prevIdx, totalLength);
+            String sub = number.substring(totalLength--);
+            //앞서 뽑은 문자열들 중 큰값을 반환
+            for(int j = 0; j < prev.length(); j++){
+                String now = prev.substring(j, j+1);
 
-    public static String[] solution(String[] orders, int[] course) {
-
-        //주문들 다 정렬
-        for (int i = 0; i < orders.length; i++) {
-            String str = orders[i];
-            char[] charArr = str.toCharArray();
-            Arrays.sort(charArr);
-            orders[i] = new String(charArr);
-        }
-
-        //course 리스트에 넣기
-        for (int c : course) {
-            courseList.add(c);
-        }
-
-        for (int i = 0; i < orders.length; i++) {
-            String prev = orders[i];
-            for (int j = i + 1; j < orders.length; j++) {
-                //공통된 요소
-                String common = "";
-                //비교대상의 String 값을 하나씩 비교
-                for (int k = 0; k < orders[j].length(); k++) {
-                    String now = orders[j].substring(k, k + 1);
-                    //만약 공통된 값이 있다면 추가
-                    if (prev.contains(now)) common += now;
-                }
-                //course와 비교
-                if (!courseList.contains(common.length())) continue;
-                //answer에 이미있는값인지 비교
-                if (answers.contains(common)) continue;
-                else {
-                    answers.add(common);
-                }
             }
         }
-
-        String[] answer = new String[answers.size()];
-        for(int i = 0; i < answers.size(); i++){
-            answer[i] = answers.get(i);
-        }
-
-        return answer;
     }
 }
