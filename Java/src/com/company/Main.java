@@ -12,5 +12,8 @@ public class Main {
         String number = "4177252841";
 
         System.out.println(number.startsWith("412"));
+
+        String[] num = new String[3];
+
     }
 }
