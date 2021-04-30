@@ -15,5 +15,13 @@ public class Main {
 
         String[] num = new String[3];
 
+        Integer iva = 4;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("1234");
+        sb.deleteCharAt(0);
+        sb.deleteCharAt(2);
+
+        System.out.println("sb = " + sb);
     }
 }
