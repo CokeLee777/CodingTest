@@ -1,11 +1,11 @@
-package com.company;
+package baekjoon.greedy;
 
 import java.util.*;
 
 /**
  * https://www.acmicpc.net/problem/2839
  */
-public class Main {
+public class problem2839 {
 
     public static int n;
     public static final int INF = (int)1e9;
