@@ -26,11 +26,11 @@ class Time implements Comparable<Time>{
 
     @Override
     public int compareTo(Time time) {
-        //시작시간이 낮은 것부터 정렬
+        //회의 시간이 적은 회의부터 정렬
         if(this.start < time.start){
             return -1;
-        } else if(this.start == time.start) {
-            //시작시간이 같으면 회의시간이 낮은 것 부터 정렬
+        } else if(this.start == time.start){
+            //회의 시작시간이 적은 회의부터 정렬
             if(this.getSub() < time.getSub()) return -1;
             else return 1;
         } else {
@@ -63,28 +63,28 @@ public class problem1931 {
         //설정한 대로 정렬
         Collections.sort(list);
         //회의의 최대개수
-        int maxCnt = 0;
+        int result = 0;
+        int startTime = -1;
+        int endTime = 0;
 
         for(int i = 0; i < n; i++){
-            //첫 회의 시간
+            //회의 시간
             Time time = list.get(i);
-            //회의가 끝나는 시간
-            int endTime = time.getEnd();
-            //현재 회의의 개수
-            int nowCnt = 1;
+            startTime = time.getStart();
+            endTime = time.getEnd();
+            int cnt = 1;
 
             for(int j = i+1; j < n; j++){
-                //끝나는 시간 뒤에 회의시간 찾기
-                if(list.get(j).getStart() >= endTime){
-                    endTime = list.get(j).getEnd();
-                    nowCnt += 1;
-                }
+                if(list.get(j).getStart() < endTime) continue;
+
+                endTime = list.get(j).getEnd();
+                cnt += 1;
             }
 
-            maxCnt = Math.max(maxCnt, nowCnt);
+            result = Math.max(result, cnt);
         }
 
-        System.out.println(maxCnt);
+        System.out.println(result);
 
     }
 }
