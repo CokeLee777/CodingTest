@@ -26,71 +26,85 @@ class Node{
         return y;
     }
 }
+
 public class MySourceCode {
 
-    public static int n, startX, startY;
-    public static int time = -1;
+    public static int n, nowX, nowY;
     public static int size = 2;
-    public static int[] fish = new int[7];
+    public static int time, ate;
     public static int[][] graph;
     // 북 서 남 동
     public static int[] dx = {-1,0,1,0};
     public static int[] dy = {0,-1,0,1};
 
-    public static void bfs(int x, int y){
+    public static final int INF = (int)1e9;
+
+    //모든 위치까지의 최단거리만 계산
+    public static int[][] bfs(){
         Queue<Node> queue = new LinkedList<>();
         //큐에 시작위치 삽입
-        queue.offer(new Node(x, y));
+        queue.offer(new Node(nowX, nowY));
+        //최단거리 테이블 초기화
+        int[][] distance = new int[n][n];
+        for(int i = 0; i < n; i++){
+            Arrays.fill(distance[i], -1);
+        }
+        //시작위치는 최단거리 0
+        distance[nowX][nowY] = 0;
 
-        int eatCnt = 0;
         //큐가 빌때까지 반복
         while(!queue.isEmpty()){
             Node now = queue.poll();
-            int nowX = now.getX();
-            int nowY = now.getY();
-            time += 1;
-
-            //먹을 수 있는 물고기가 없다면
-            if(fish[size-1] == 0) break;
-
-            //네 방향 모두에 대해서 물고기 찾기
+            int x = now.getX();
+            int y = now.getY();
+            //네 방향 모두 반복
             for(int i = 0; i < 4; i++){
-                int nx = nowX + dx[i];
-                int ny = nowY + dy[i];
-
+                int nx = x + dx[i];
+                int ny = y + dy[i];
                 //벽이라면 무시
                 if(nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
-                //먹을 수 없는 물고기라면 무시
-                if(graph[nx][ny] > size) continue;
-                //먹을 수 없지만 지나갈 수 있는 물고기라면 지나간다
-                if(graph[nx][ny] == size){
+                //벽이 아니라면 자신의 크기보다 작거나 같은 경우 지나감
+                if(distance[nx][ny] == -1 && graph[nx][ny] <= size){
+                    distance[nx][ny] = distance[x][y] + 1;
                     queue.offer(new Node(nx, ny));
-                    continue;
-                }
-                //먹을 수 있는 물고기인 경우
-                if(graph[nx][ny] < size && graph[nx][ny] != 0){
-                    queue.offer(new Node(nx, ny));
-                    graph[nx][ny] = 0;
-                    eatCnt += 1;
-                    fish[size-1] -= 1;
-                    if(eatCnt == size){
-                        size += 1;
-                        eatCnt = 0;
-                    }
-                    continue;
-                }
-                //빈칸인 경우
-                if(graph[nx][ny] == 0){
-                    queue.offer(new Node(nx, ny));
-                    continue;
                 }
             }
         }
+
+        return distance;
+    }
+
+    //먹을 수 있는 물고기를 찾는 함수
+    public static int[] find(int[][] distance){
+        int[] result = new int[3];
+        int x = 0;
+        int y = 0;
+        int minDistance = INF;
+
+        //먹을 수 있는 물고기들 중에서 최단거리에 있는 물고기 찾기
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                //도달이 가능하면서 먹을 수 있는 물고기가 있을 때
+                if(distance[i][j] != -1 && graph[i][j] >= 1 && graph[i][j] < size){
+                    //가장 가까운 물고기 선택
+                    if(distance[i][j] < minDistance){
+                        x = i;
+                        y = j;
+                        minDistance = distance[i][j];
+                    }
+                }
+            }
+        }
+        //결과값 배열에 담아 출력
+        result[0] = x;
+        result[1] = y;
+        result[2] = minDistance;
+
+        return result;
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        boolean flag = false;
 
         //그래프의 크기 입력받기
         n = sc.nextInt();
@@ -99,26 +113,42 @@ public class MySourceCode {
         for(int i = 0; i < n; i++){
             for(int j = 0; j < n; j++){
                 graph[i][j] = sc.nextInt();
-                if(graph[i][j] == 9){
-                    startX = i;
-                    startY = j;
-                    graph[i][j] = 0;
-                }
-                if(graph[i][j] >= 1 && graph[i][j] <= 6){
-                    fish[graph[i][j]] += 1;
-                }
-                //먹을 수 있는 물고기가 있다면
-                if(graph[i][j] == 1) flag = true;
             }
         }
 
-        if(flag == true){
-            bfs(startX, startY);
-            System.out.println(time);
-        } else {
-            System.out.println(0);
+        //아기상어의 시작 위치를 찾은 뒤 그 위치에 0 삽입
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < n; j++){
+                if(graph[i][j] == 9){
+                    nowX = i;
+                    nowY = j;
+                    graph[i][j] = 0;
+                    break;
+                }
+            }
         }
 
+        while(true){
+            int[] result = find(bfs());
+            //먹을 수 있는 물고기가 없는 경우
+            if(result[2] == INF){
+                System.out.println(time);
+                return;
+            } else {
+                //현재위치 갱신 및 이동거리 합하기
+                nowX = result[0];
+                nowY = result[1];
+                time += result[2];
+                //먹은 위치 초기화
+                graph[nowX][nowY] = 0;
+                ate += 1;
+                //크기증가가 가능하다면 크기 증가
+                if(ate >= size){
+                    size += 1;
+                    ate = 0;
+                }
+            }
+        }
 
     }
 }
