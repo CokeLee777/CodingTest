@@ -4,25 +4,29 @@ import java.util.*;
 
 public class MySourceCode {
 
-    public static int n;    //동전의 갯수
-    public static List<Integer> arrayList = new ArrayList<>();
+    public static int n;
+    public static int[] coins;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        //동전의 갯수 입력받기
+        //동전의 개수 입력받기
         n = sc.nextInt();
         //동전 입력받기
+        coins = new int[n];
         for(int i = 0; i < n; i++){
-            arrayList.add(sc.nextInt());
+            int coin = sc.nextInt();
+            coins[i] = coin;
         }
 
-        Collections.sort(arrayList);    //동전들 크기순으로 정렬
+        //동전들 오름차순으로 정렬하기
+        Arrays.sort(coins);
 
         int target = 1;
-        for(int i = 0; i < n; i++){
-            //만들 수 없는 금액을 찾았을 때 반복 종료
-            if(target < arrayList.get(i)) break;
-            target += arrayList.get(i);
+        for(int coin: coins){
+            if(target < coin) break;
+            target += coin;
         }
+
+        System.out.println(target);
     }
 }

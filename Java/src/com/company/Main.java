@@ -2,34 +2,41 @@ package com.company;
 
 import java.util.*;
 
-/**
- * https://www.acmicpc.net/problem/2839
- */
 public class Main {
-
-    public static int n;
-    public static final int INF = (int)1e9;
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        //배달해야하는 설탕의 무게
-        n = sc.nextInt();
+        String s = "cdcd";
 
-        int cnt = INF;
-        int fiveCnt = 0;
-        while(n - 5 * fiveCnt >= 0){
-
-            //무게가 5인 봉지에 우선 담는다
-            if((n - 5 * fiveCnt) % 3 == 0){
-                cnt = Math.min(cnt, fiveCnt + (n - 5 * fiveCnt) / 3);
+        while(true){
+            String compressed = "";
+            for(int i = 1; i < s.length(); i++){
+                String prev = s.substring(i-1,i);
+                String sub = s.substring(i, i+1);
+                //앞뒤 문자열이 같다면 압축 - 사라짐
+                if(prev.equals(sub)){
+                    compressed += s.substring(i+1);
+                    break;
+                }
+                //아니면 문자열 그대로 반환
+                else{
+                    if(i == s.length()-1) compressed += prev + sub;
+                    else compressed += prev;
+                }
             }
-
-            fiveCnt += 1;
+            //압축할 것이 없고 그대로 출력된다면 0 반환 후 종료
+            if(s.equals(compressed)){
+                System.out.println(0);
+                break;
+            }
+            //아니면 압축 후 다시수행
+            s = compressed;
+            //빈 문자열까지 압축했다면 1 반환 후 종료
+            if(s.equals("")){
+                System.out.println(1);
+                break;
+            }
         }
-
-        if(cnt == INF) System.out.println(-1);
-        else System.out.println(cnt);
-
     }
 }
