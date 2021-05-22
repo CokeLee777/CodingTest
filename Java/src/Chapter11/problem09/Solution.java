@@ -2,15 +2,7 @@ package Chapter11.problem09;
 
 import java.util.*;
 
-/**
- * "aabbaccc" 	                7
- * "ababcdcdababcdcd" 	        9
- * "abcabcdede" 	            8
- * "abcabcabcabcdededededede" 	14
- * "xababcdcdababcdcd" 	        17
- */
-
-public class MySourceCode {
+public class Solution {
 
     public static String inputStr;
 
@@ -24,21 +16,26 @@ public class MySourceCode {
             int cnt = 1;
             //단위(step) 크기만큼 증가시키며 이전 문자열과 비교
             for(int j = step; j < s.length(); j += step){
-                //다음 step 만큼의 문자열
+                //다음 step 만큼의 문자열이 이전 상태와 동일하다면 압축 횟수(count) 증가
                 String sub = "";
-
+//                for(int k = j; k < j + step; k++){
+//                    //원래 문자열의 길이를 넘지 않는 선에서 문자열을 더한다
+//                    if(k < s.length()) sub += s.charAt(k);
+//                }
                 //원래 문자열의 길이를 넘지 않는 선에서 문자열을 더한다.
                 if(j + step < s.length()) sub = s.substring(j, j+step);
                 else sub = s.substring(j);
 
-                //다음 step 만큼의 문자열이 이전 상태와 동일하다면 압축 횟수(count) 증가
                 if(prev.equals(sub)) cnt += 1;
                 //다른 문자열이 나왔다면(더 이상 압축하지 X)
                 else{
                     //같은 문자열이 2번이상 중복되었다면 앞에 중복된 횟수를 넣고 문자열 삽입
                     compressed += (cnt >= 2) ? cnt + prev : prev;
-                    //앞선 문자열 다시 상태 초기화 -> 압축된 문자열 다음 문자열을 삽입
-                    prev = sub;
+                    sub = "";
+                    for(int k = j; k < j + step; k++){
+                        if(k < s.length()) sub += s.charAt(k);
+                    }
+                    prev = sub; //다시 상태 초기화
                     cnt = 1;
                 }
             }
