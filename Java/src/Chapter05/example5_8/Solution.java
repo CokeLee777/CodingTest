@@ -2,6 +2,11 @@ package Chapter05.example5_8;
 
 import java.util.*;
 
+/**
+ * DFS
+ * Depth First Search(깊이 우선 탐색)
+ * 가장 멀리있는 노드 우선 탐색
+ */
 public class Solution {
     public static ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>();
 
@@ -13,7 +18,7 @@ public class Solution {
         System.out.print(now + " ");
 
         for(int i = 0; i < graph.get(now).size(); i++){
-
+            //현재 노드와 연결된 노드중 안가본 노드가 있다면 방문
             if(!visited[graph.get(now).get(i)]){
                 int y = graph.get(now).get(i);
                 Dfs(y);

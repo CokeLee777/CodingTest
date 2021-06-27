@@ -1,7 +1,8 @@
 package Chapter06.example6_1;
 
-import java.util.*;
-
+/**
+ * 삽입정렬
+ */
 public class Solution {
 
     public static int[] arr = new int[]{7,5,9,0,3,1,6,2,4,8};
