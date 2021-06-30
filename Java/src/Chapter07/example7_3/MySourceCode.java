@@ -8,7 +8,6 @@ public class MySourceCode {
     public static int n;
     public static int target;
 
-    //재귀함수로 구현한 이진탐색 메서드
     public static int binarySearch(int start, int end, int target){
         while(start <= end){
             //중간점 지정

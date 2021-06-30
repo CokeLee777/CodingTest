@@ -25,7 +25,6 @@ public class MySourceCode {
                 dfs(nx,ny);
             }
         }
-
     }
 
     public static void main(String[] args) {

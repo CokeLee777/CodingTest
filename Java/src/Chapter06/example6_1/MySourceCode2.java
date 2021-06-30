@@ -1,8 +1,8 @@
-package com.company;
+package Chapter06.example6_1;
 
 import java.util.*;
 
-public class Main {
+public class MySourceCode2 {
 
     public static int[] arr = {7,5,9,0,3,1,6,2,4,8};
 
@@ -25,4 +25,5 @@ public class Main {
             System.out.print(i + " ");
         }
     }
+
 }

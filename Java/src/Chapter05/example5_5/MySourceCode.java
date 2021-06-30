@@ -24,5 +24,6 @@ public class MySourceCode {
 
         System.out.println("반복적으로 구현: " + factorial1(5));
         System.out.println("재귀적으로 구현: " + factorial2(5));
+
     }
 }
