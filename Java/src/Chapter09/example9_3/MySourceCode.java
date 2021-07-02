@@ -34,7 +34,7 @@ public class MySourceCode {
         //플로이드 워셜 알고리즘 수행
         for(int k = 1; k <= n; k++){
             for(int a = 1; a <= n; a++){
-                for(int b = 1; b <=n; b++){
+                for(int b = 1; b <= n; b++){
                     graph[a][b] = Math.min(graph[a][b], graph[a][k] + graph[k][b]);
                 }
             }
