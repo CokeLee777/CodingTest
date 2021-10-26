@@ -5,74 +5,35 @@ import java.util.*;
 public class MySourceCode {
 
     public static int n;
-    //상하좌우
-    public static int[] dx = {-1,1,0,0};
-    public static int[] dy = {0,0,-1,1};
-    //결과값의 좌표
-    public static int[] result = {1,1};
+    public static int[] dx = {0,0,-1,1};
+    public static int[] dy = {1,-1,0,0};
+    public static char[] moveTypes = {'R','L','U','D'};
 
-    public static int[] travel(int[] result, String[] plan){
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int x = 0;
+        int y = 0;
 
-        //계획서 대로 수행
-        for(String p: plan){
-            if(p.equals("U")){
-                int nx = result[0] + dx[0];
-                int ny = result[1] + dy[0];
-                //벽을 만난다면 무시
-                if(nx < 1 || nx > n || ny < 1 || ny > n) continue;
-                else {
-                    result[0] = nx;
-                    result[1] = ny;
-                    continue;
+        n = sc.nextInt();
+        sc.nextLine();
+        String[] plans = sc.nextLine().split(" ");
+
+        for (String plan : plans) {
+            int nx = -1, ny = -1;
+            for(int i = 0; i < moveTypes.length; i++){
+                if(plan.charAt(0) == moveTypes[i]){
+                    nx = x + dx[i];
+                    ny = y + dy[i];
+                    break;
                 }
             }
-            if(p.equals("D")){
-                int nx = result[0] + dx[1];
-                int ny = result[1] + dy[1];
-                //벽을 만난다면 무시
-                if(nx < 0 || nx > n || ny < 0 || ny > n) continue;
-                else {
-                    result[0] = nx;
-                    result[1] = ny;
-                    continue;
-                }
-            }
-            if(p.equals("L")){
-                int nx = result[0] + dx[2];
-                int ny = result[1] + dy[2];
-                //벽을 만난다면 무시
-                if(nx < 0 || nx > n || ny < 0 || ny > n) continue;
-                else {
-                    result[0] = nx;
-                    result[1] = ny;
-                    continue;
-                }
-            }
-            if(p.equals("R")){
-                int nx = result[0] + dx[3];
-                int ny = result[1] + dy[3];
-                //벽을 만난다면 무시
-                if(nx < 0 || nx > n || ny < 0 || ny > n) continue;
-                else {
-                    result[0] = nx;
-                    result[1] = ny;
-                    continue;
-                }
-            }
+
+            if(nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
+
+            x = nx;
+            y = ny;
         }
 
-        return result;
-    }
-
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-
-        n = sc.nextInt();   //공간의 크기 입력받기
-        sc.nextLine();
-        String[] plan = sc.nextLine().split(" ");
-
-        result = travel(MySourceCode.result, plan);
-
-        System.out.println(result[0] + " " + result[1]);
+        System.out.println((x+1) + " " + (y+1));
     }
 }
