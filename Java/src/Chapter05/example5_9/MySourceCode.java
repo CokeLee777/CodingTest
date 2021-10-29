@@ -18,6 +18,9 @@ public class MySourceCode {
 
     public static boolean[] visited = new boolean[9];
 
+    /**
+     * 너비 우선 탐색: 가까운 노드부터 탐색하는 알고리즘
+     */
     public static void bfs(int start){
         Queue<Integer> queue = new LinkedList<>();
 
