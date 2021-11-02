@@ -12,6 +12,7 @@ public class MySourceCode {
         int left = start + 1;
         int right = end;
 
+        //왼쪽의 데이터와 오른쪽의 데이터가 서로 만날때까지 반복
         while(left <= right){
             //피벗보다 큰 데이터를 찾을 때까지 반복
             while(left <= end && arr[pivot] > arr[left]) left++;

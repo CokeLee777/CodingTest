@@ -2,6 +2,7 @@ package Chapter06.example6_1;
 
 /**
  * 삽입정렬
+ * 시간 복잡도: O(n^2)
  */
 public class Solution {
 
