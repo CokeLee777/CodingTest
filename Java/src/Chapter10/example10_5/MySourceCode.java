@@ -55,9 +55,10 @@ public class MySourceCode {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
+        //노드의 개수와 간선의 개수 입력받기
         v = sc.nextInt();
         e = sc.nextInt();
-        // 부모테이블을 자신으로 초기화
+        // 부모테이블을 자기자신으로 초기화
         for(int i = 1; i <= v; i++){
             parent[i] = i;
         }
@@ -70,14 +71,16 @@ public class MySourceCode {
             edges.add(new Edge(a, b, c));
         }
 
-        Collections.sort(edges);    //비용 순으로 정렬
+        Collections.sort(edges);    //비용이 작은 순으로 정렬
 
         //비용이 낮은 것 부터 차례대로 확인
         for(int i = 0; i < edges.size(); i++){
             int a = edges.get(i).getNodeA();
             int b = edges.get(i).getNodeB();
             int cost = edges.get(i).getDistance();
-            //사이클이 발생하지 않은 경우만 포함
+            /**
+             * 사이클이 발생하지 않은 경우만 포함
+             */
             if(findParent(a) != findParent(b)){
                 unionParent(a, b);
                 result += cost;

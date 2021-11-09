@@ -12,7 +12,7 @@ public class MySourceCode {
         //자기 자신이 부모라면 자기자신 반환
         if(x == parent[x]) return x;
         //아니라면 자신의 부모를 호출
-        return parent[x] = findParent(parent[x]);
+        return parent[x] = findParent(parent[x]);   //경로 압축 기법
     }
 
     //두 원소가 속한 집합을 합치기
