@@ -2,95 +2,76 @@ package com.company;
 
 import java.util.*;
 
-class Node implements Comparable<Node>{
+class Music implements Comparable<Music>{
 
-    private int index;
-    private int distance;
+    private int number;
+    private int plays;
 
-    public Node(int index, int distance) {
-        this.index = index;
-        this.distance = distance;
+    public Music(int number, int plays){
+        this.number = number;
+        this.plays = plays;
     }
 
-    public int getIndex() {
-        return index;
+    public int getNumber(){
+        return this.number;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public int getDistance() {
-        return distance;
-    }
-
-    public void setDistance(int distance) {
-        this.distance = distance;
+    public int getPlays(){
+        return this.plays;
     }
 
     @Override
-    public int compareTo(Node node) {
-        if(this.distance < node.distance) return -1;
+    public int compareTo(Music music) {
+        if(this.plays > music.plays) return -1;
+        else if (this.plays == music.plays){
+            if(this.number < music.number) return -1;
+            else return 1;
+        }
         else return 1;
     }
 }
 
 public class Main {
 
-    public static final int INF = (int)1e9;
-    public static List<List<Node>> graph = new ArrayList<>();   //그래프
-    public static int n, m;             //노드와 간선 수
-    public static boolean[] visited;    //방문여부
-    public static int[] d;              //최단거리 테이블
+    public static Map<String, List<Music>> musics = new HashMap<>();
+    public static List<String> sortedList = new ArrayList<>();
 
-    public static void dyikstra(int start){
-        PriorityQueue<Node> pq = new PriorityQueue<>();
+    public static int[] solution(String[] genres, int[] plays) {
+        int[] answer = {};
 
-        pq.add(new Node(start, 0));
-        d[start] = 0;
+        Set<String> genre = new HashSet<>(Arrays.asList(genres));
 
-        while(!pq.isEmpty()){
-            Node node = pq.poll();
-            int index = node.getIndex();
-            int distance = node.getDistance();
-
-            //이미 처리되었다면 무시
-            if(d[index] < distance) continue;
-
-            //연결된 노드를 탐색
-            for(int i = 0; i < graph.get(index).size(); i++){
-                int cost = d[index] + graph.get(index).get(i).getDistance();
-                if(cost < d[graph.get(index).get(i).getIndex()]){   //다른노드를 거쳐서가는 것이 한번에 가는 것보다 거리가 짧다면
-                    d[graph.get(index).get(i).getIndex()] = cost;
-                    pq.offer(new Node(graph.get(index).get(i).getIndex(), cost));
-                }
+        for(int i = 0; i < plays.length; i++){
+            List<Music> music = new ArrayList<>();
+            if(musics.get(genres[i]) == null){
+                music.add(new Music(i, plays[i]));
+                musics.put(genres[i], music);
+            } else {
+                musics.get(genres[i]).add(new Music(i, plays[i]));
             }
         }
+
+        for (String g : genre) {
+            Collections.sort(musics.get(g));
+        }
+
+        int maxPlay = 0;
+        String maxGenre = "";
+
+        for (String g : genre) {
+            Music music = musics.get(g).get(musics.size() - 1);
+            if(music.getPlays() > maxPlay) maxGenre = g;
+        }
+
+        return answer;
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        n = sc.nextInt();
-        m = sc.nextInt();
-        //방문여부 테이블과 최단거리 테이블 초기화
-        visited = new boolean[n+1];
-        d = new int[n+1];
-        Arrays.fill(d, INF);
+        String[] genres = {"classic", "pop", "classic", "classic", "pop"};
+        int[] plays = {500, 600, 150, 800, 2500};
 
-        //그래프 초기화
-        for(int i = 0; i < n+1; i++){
-            graph.add(new ArrayList<>());
-        }
-        for(int i = 0; i < m; i++){
-            int a = sc.nextInt();
-            int b = sc.nextInt();
-            int c = sc.nextInt();
-
-            graph.get(a).add(new Node(b, c));
-        }
-
-        dyikstra(1);
-
+        solution(genres, plays);
     }
 }
