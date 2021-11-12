@@ -31,28 +31,27 @@ public class MySourceCode {
 
     public static final int INF = (int)1e9;
     public static int n, m, start;
-
-    public static ArrayList<ArrayList<Node1>> graph = new ArrayList<>();
+    public static List<List<Node1>> graph = new ArrayList<>();
     public static int[] d;
 
-    public static void dyikstra(int start){
+    private static void dyikstra(int start) {
         PriorityQueue<Node1> pq = new PriorityQueue<>();
-
-        //시작노드로 가는 비용은 0
-        d[start] = 0;
-        //시작노드 큐에 삽입
+        //우선순위 큐에 시작노드 삽입
         pq.offer(new Node1(start, 0));
+        //시작노드는 거리가 0
+        d[start] = 0;
 
-        //다익스트라 최단경로 알고리즘 수행
+        //큐가 빌때까지 반복
         while(!pq.isEmpty()){
-            Node1 now = pq.poll();
-            int index = now.getIndex();
-            int distance = now.getDistance();
+            //우선순위 큐에서 꺼내므로 거리가 가장 짧은 것 부터 우선적으로 꺼낸다.
+            Node1 node = pq.poll();
+            int index = node.getIndex();
+            int distance = node.getDistance();
 
-            //이미 처리된 노드라면 무시 - 해당 노드가 INF가 아니라면 무시
+            //이미 처리된 경우 무시 - 현재 노드의 최단거리 테이블이 INF가 아닌경우
             if(d[index] < distance) continue;
 
-            //현재 노드와 붙어있는 노드에 대해 다익스트라 최단경로 알고리즘 수행
+            //아닌 경우 경유하는 거리와 아닌경우 비교해서 짧은 거리 최단거리 테이블에 삽입
             for(int i = 0; i < graph.get(index).size(); i++){
                 int cost = d[index] + graph.get(index).get(i).getDistance();
                 if(cost < d[graph.get(index).get(i).getIndex()]){
@@ -65,34 +64,33 @@ public class MySourceCode {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        //노드의 개수 간선의 개수, 시작 노드번호 입력받기
+
+        //노드의 개수 입력받기
         n = sc.nextInt();
+        //간선의 개수 입력받기
         m = sc.nextInt();
+        //시작 노드 입력받기
         start = sc.nextInt();
 
-        //그래프 입력받기
+        //최단거리 테이블 및 그래프 초기화
+        d = new int[n+1];
+        Arrays.fill(d, INF);
+
         for(int i = 0; i < n+1; i++){
             graph.add(new ArrayList<>());
         }
 
+        //그래프의 간선 입력받기
         for(int i = 0; i < m; i++){
             int a = sc.nextInt();
             int b = sc.nextInt();
-            int distance = sc.nextInt();
+            int c = sc.nextInt();
 
-            graph.get(a).add(new Node1(b,distance));
+            graph.get(a).add(new Node1(b, c));
         }
 
-        //최단거리 테이블 초기화
-        d = new int[n+1];
-        Arrays.fill(d, INF);
-
+        //다익스트라 최단거리 알고리즘 실행
         dyikstra(start);
-
-        for (int i = 1; i < n+1; i++) {
-            if(d[i] == INF) System.out.println("INFINITY");
-            else System.out.println(d[i]);
-        }
     }
 
 }
