@@ -13,7 +13,7 @@ class Snake{
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(int x) {
@@ -21,7 +21,7 @@ class Snake{
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(int y) {
@@ -40,11 +40,11 @@ class TurnTime{
     }
 
     public int getTime() {
-        return time;
+        return this.time;
     }
 
     public String getDirection() {
-        return direction;
+        return this.direction;
     }
 }
 
@@ -57,11 +57,13 @@ public class MySourceCode2 {
     public static List<TurnTime> turnTimes = new ArrayList<>();
 
     public static int turnRight(int direction) {
-        return direction > 3 ? 0 : direction+1;
+        direction += 1;
+        return direction > 3 ? 0 : direction;
     }
 
     public static int turnLeft(int direction){
-        return direction < 0 ? 3 : direction-1;
+        direction -= 1;
+        return direction < 0 ? 3 : direction;
     }
 
     public static void main(String[] args) {
@@ -71,7 +73,6 @@ public class MySourceCode2 {
         k = sc.nextInt();   //사과의 개수
 
         graph = new int[n][n];
-        graph[0][0] = 1;
 
         //사과의 위치 입력받기
         for(int i = 0; i < k; i++){
@@ -80,6 +81,8 @@ public class MySourceCode2 {
 
             graph[row-1][column-1] = 2;  //사과의 위치
         }
+
+        graph[0][0] = 1;
 
         l = sc.nextInt();   //뱀의 방향 변환 횟수
         //총 시간
@@ -105,44 +108,38 @@ public class MySourceCode2 {
         while(!queue.isEmpty()){
             time += 1;
             //먼저 몸 길이를 늘려서 머리를 다음 칸에 위치시킨다.
-            Snake tail = queue.peek();
             int nx = x + dx[direction];
             int ny = y + dy[direction];
 
-            queue.offer(new Snake(nx, ny));
-
-            // 이동한 곳이 벽이라면 게임 종료
-            if(nx < 0 || nx >= n || ny < 0 || ny >= n) {
+            // 이동한 곳이 벽이라면, 자기자신의 몸과 부딪힌다면 게임 종료
+            if(nx < 0 || nx >= n || ny < 0 || ny >= n || graph[nx][ny] == 1) {
                 System.out.println(time);
-                return;
-            }
-            //자기자신의 몸과 부딪힌다면 게임 종료
-            if(graph[nx][ny] == 1) {
-                System.out.println(time);
-                return;
+                break;
             }
             //이동한 칸에 사과가 있다면 사과가 없어지고 꼬리 움직이지 X
             if(graph[nx][ny] == 2){
-                graph[nx][ny] = 1;
-                x = nx;
-                y = ny;
+                graph[nx][ny] = 1;              //사과가 없어지고 뱀의 머리가 위치한다.
+                queue.offer(new Snake(nx, ny));
             }
             //이동한 칸에 사과가 없다면 몸길이 변화 X
             else {
                 graph[nx][ny] = 1;
-                x = nx;
-                y = ny;
-                //몸길이 변화 X
+                queue.offer(new Snake(nx, ny));
+                //몸길이 변화 X -> 꼬리를 잘라준다.
+                Snake tail = queue.poll();
                 graph[tail.getX()][tail.getY()] = 0;
-                queue.poll();
             }
+
+            //뱀 머리의 위치 변경
+            x = nx;
+            y = ny;
 
             if(count < l && time == turnTimes.get(count).getTime()){
                 //방향 전환을 해야한다면
                 if(turnTimes.get(count).getDirection().equals("L")) direction = turnLeft(direction);
                 if(turnTimes.get(count).getDirection().equals("D")) direction = turnRight(direction);
-                break;
 
+                count += 1;
             }
         }
     }
