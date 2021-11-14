@@ -1,4 +1,4 @@
-package com.company;
+package programmers;
 
 import java.util.*;
 
@@ -12,8 +12,7 @@ import java.util.*;
  *      만약 제거 후 마침표(.)가 new_id의 끝에 위치한다면 끝에 위치한 마침표(.) 문자를 제거합니다.
  * 7단계 new_id의 길이가 2자 이하라면, new_id의 마지막 문자를 new_id의 길이가 3이 될 때까지 반복해서 끝에 붙입니다.
  */
-
-public class Main {
+public class NewId {
 
     public static String solution(String new_id) {
 
@@ -24,7 +23,7 @@ public class Main {
         //3단계 수행(마침표가 2번이상 연속된 부분을 하나의 마침표로 치환
         new_id = new_id.replaceAll("\\.{2,}", ".");
         //4단계 수행(마침표가 처음이나 끝에 존재한다면 제거
-        //new_id.replaceAll("^[.]|[.]$","");
+        //new_id.replaceAll("^[.]|[.]$",""); -> 모범 답안
         if(new_id.startsWith(".")) new_id = new_id.substring(1);
         if(new_id.endsWith(".")) new_id = new_id.substring(0,new_id.length()-1);
         //5단계 수행(빈 문자열이라면 a를 삽입)
@@ -43,7 +42,9 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        String answer = solution("=.=");
+        String id = sc.next();
+
+        String answer = solution(id);
 
         System.out.println(answer);
     }
