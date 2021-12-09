@@ -3,8 +3,9 @@ package Chapter11.problem27;
 import java.util.*;
 
 public class Solution {
-
+    //찾는 숫자중에 제일 낮은 인텍스 찾기
     public static int lowerBound(int[] arr, int target, int start, int end) {
+        //start 인덱스가 end 인덱스보다 작을때까지만 반복
         while (start < end) {
             int mid = (start + end) / 2;
             if (arr[mid] >= target) end = mid;
@@ -12,7 +13,7 @@ public class Solution {
         }
         return end;
     }
-
+    //찾는 숫자중에 제일 높은 인덱스 찾기
     public static int upperBound(int[] arr, int target, int start, int end) {
         while (start < end) {
             int mid = (start + end) / 2;

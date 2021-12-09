@@ -16,8 +16,6 @@ import java.util.*;
  */
 public class MySourceCode {
 
-    public static String answer = "";
-
     public static String solution(String p) {
 
         String split = split(p);
