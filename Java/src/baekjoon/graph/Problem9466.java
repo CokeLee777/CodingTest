@@ -4,17 +4,13 @@ import java.io.*;
 
 public class Problem9466 {
 
-    private static int tmp;
+    private static int n, tmp;
     private static int[] parent;
-    private static boolean[] visited;
 
-    private static int dfs(int now){
-        if(visited[now]) return now;
-        //방문처리
-        visited[now] = true;
+    private static int findParent(int x){
+        if(x == parent[x]) return x;
         tmp++;
-
-        return dfs(parent[now]);
+        return parent[x] = findParent(parent[x]);
     }
 
     public static void main(String[] args) throws IOException {
@@ -27,25 +23,34 @@ public class Problem9466 {
         StringBuilder results = new StringBuilder();
         for(int test = 0; test < t; test++){
             //학생의 수 입력받기
-            int n = Integer.parseInt(br.readLine());
+            n = Integer.parseInt(br.readLine());
             //학생 입력받기
             String[] input = br.readLine().split(" ");
             //부모 테이블 초기화
             parent = new int[n+1];
-            visited = new boolean[n+1];
             for(int i = 1; i < parent.length; i++){
-                parent[i] = Integer.parseInt(input[i-1]);
+                parent[i] = i;
             }
-            //UnionParent 수행
-            int count = n;
+
+            //선택한 학생들 번호 입력받기
+            int cnt = 0;
             for(int a = 1; a <= n; a++){
-                tmp = 0;
-                if(a == dfs(a)){
-                    if(a == parent[a]) count--;
-                    else count -= tmp;
+                int b = Integer.parseInt(input[a-1]);
+
+                //사이클이 발생 했다면
+                if(findParent(a) != findParent(b)){
+                    cnt ++;
+                } else {
+                    if (a != b) {
+                        tmp = 0;
+                        findParent(b);
+                        cnt -= tmp;
+                    }
                 }
+                parent[a] = b;
             }
-            results.append(count).append("\n");
+
+            results.append(n - cnt).append("\n");
         }
 
         bw.write(results.toString());
