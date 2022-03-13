@@ -1,90 +1,47 @@
 package baekjoon.greedy;
 
+import java.io.*;
 import java.util.*;
 
-class Time implements Comparable<Time>{
-
-    private int start;
-    private int end;
-
-    public Time(int start, int end) {
-        this.start = start;
-        this.end = end;
-    }
-
-    public int getStart() {
-        return start;
-    }
-
-    public int getEnd() {
-        return end;
-    }
-
-    public int getSub(){
-        return end - start;
-    }
-
-    @Override
-    public int compareTo(Time time) {
-        //회의 시간이 적은 회의부터 정렬
-        if(this.start < time.start){
-            return -1;
-        } else if(this.start == time.start){
-            //회의 시작시간이 적은 회의부터 정렬
-            if(this.getSub() < time.getSub()) return -1;
-            else return 1;
-        } else {
-            return 1;
-        }
-    }
-}
-
-/**
- * https://www.acmicpc.net/problem/1931
- * 수정중
- */
 public class problem1931 {
 
-    public static int n;
-    public static ArrayList<Time> list = new ArrayList<>();
+    private static int n;
+    private static int[][] conference;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        //회의의 개수 입력받기
-        n = sc.nextInt();
-
-        //회의 시간들 입력받기
+        //회의의 수 입력받기
+        n = Integer.parseInt(br.readLine());
+        //각 회의 입력받기
+        conference = new int[n][2];
         for(int i = 0; i < n; i++){
-            int start = sc.nextInt();
-            int end = sc.nextInt();
-            list.add(new Time(start, end));
+            String[] input = br.readLine().split(" ");
+
+            conference[i][0] = Integer.parseInt(input[0]);
+            conference[i][1] = Integer.parseInt(input[1]);
         }
-        //설정한 대로 정렬
-        Collections.sort(list);
-        //회의의 최대개수
-        int result = 0;
-        int startTime = -1;
+
+        //종료시간을 기준으로 오름차순 정렬
+        Arrays.sort(conference, (o1, o2) -> {
+            if(o1[1] < o2[1]) return -1;
+            //종료시간이 같으면 시작시간이 빠른 순서대로 정렬
+            else if(o1[1] == o2[1]) return o1[0] - o2[0];
+            else return 1;
+        });
+
+        //회의의 최대개수 찾기
+        int max = 0;
         int endTime = 0;
-
         for(int i = 0; i < n; i++){
-            //회의 시간
-            Time time = list.get(i);
-            startTime = time.getStart();
-            endTime = time.getEnd();
-            int cnt = 1;
-
-            for(int j = i+1; j < n; j++){
-                if(list.get(j).getStart() < endTime) continue;
-
-                endTime = list.get(j).getEnd();
-                cnt += 1;
+            if(endTime <= conference[i][0]){
+                endTime = conference[i][1];
+                max++;
             }
-
-            result = Math.max(result, cnt);
         }
 
-        System.out.println(result);
-
+        bw.write(max + "\n");
+        bw.flush();
     }
 }
